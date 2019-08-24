@@ -11,4 +11,13 @@ import scrapy
 class BuffterflyItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    name = scrapy.Field()
+    price = scrapy.Field()
+
+
+class TopicItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    topicUrl = scrapy.Field()
+    name = scrapy.Field()
+    src = scrapy.Field()

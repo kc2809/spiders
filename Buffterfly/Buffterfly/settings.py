@@ -11,9 +11,10 @@
 
 BOT_NAME = 'Buffterfly'
 
+SPLASH_URL = 'http://192.168.1.219:8050'
+
 SPIDER_MODULES = ['Buffterfly.spiders']
 NEWSPIDER_MODULE = 'Buffterfly.spiders'
-
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'Buffterfly (+http://www.yourdomain.com)'
@@ -50,6 +51,18 @@ ROBOTSTXT_OBEY = True
 #    'Buffterfly.middlewares.BuffterflySpiderMiddleware': 543,
 #}
 
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
@@ -64,9 +77,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'Buffterfly.pipelines.BuffterflyPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'Buffterfly.pipelines.BuffterflyPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
