@@ -7,11 +7,13 @@ from scrapy.selector import Selector
 from scrapy_splash import SplashRequest
 import datetime
 
+
 class PicthTopicSpider(scrapy.Spider):
     name = "topic"
+    TOPIC_URL = "http://www.pic-th.com/ajax/load.php?action=load_all&page=$pageId"
 
     def start_requests(self):
-        urls = ["http://www.pic-th.com/ajax/load.php?action=load_all&page=1"]
+        urls = self.generateTopicUrls(self.settings.get('PAGE_NUMBER'))
         for url in urls:
             yield SplashRequest(url, self.parse, args={"wait": 2})
 
@@ -25,7 +27,8 @@ class PicthTopicSpider(scrapy.Spider):
         htmlSource = self.getHtmlFromResponse(response.body)
         topics = self.parseTopicItem(htmlSource)
         if not topics:
-            self.logger.error("Could not parse html source structure has changed")
+            self.logger.error(
+                "Could not parse html source structure has changed")
         return topics
 
     def getHtmlFromResponse(self, jsonString):
@@ -46,9 +49,15 @@ class PicthTopicSpider(scrapy.Spider):
         for diva in x:
             ablock = Selector(text=diva)
             topicItem = TopicItem()
-            topicItem["name"] = ablock.xpath("//a/@href").get()
-            topicItem["src"] = ablock.xpath("//img/@src").get()
-            topicItem["topicUrl"] = ablock.xpath("//p/text()").get()
+            topicItem["url"] = ablock.xpath("//a/@href").get()
+            topicItem["avatar"] = ablock.xpath("//img/@src").get()
+            topicItem["name"] = ablock.xpath("//p/text()").get()
             topics.append(topicItem)
 
         return topics
+
+    def generateTopicUrls(self, pageNumber):
+        urls = []
+        for i in range(1, int(pageNumber)):
+            urls.append(self.TOPIC_URL.replace("$pageId", str(i)))
+        return urls

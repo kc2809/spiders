@@ -1,4 +1,5 @@
 import json
+import re
 
 x = '{"name": "John", "age": 30, "city": "New York"}'
 
@@ -25,3 +26,5 @@ for i in range(1, 100):
 
 print(urlArr)
 
+str1 = 'topic-456.html'
+print(re.findall('\d+', str1)[0])

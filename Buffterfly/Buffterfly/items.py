@@ -18,6 +18,6 @@ class BuffterflyItem(scrapy.Item):
 class TopicItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    topicUrl = scrapy.Field()
+    url = scrapy.Field()
     name = scrapy.Field()
-    src = scrapy.Field()
+    avatar = scrapy.Field()
