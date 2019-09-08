@@ -15,7 +15,7 @@ class PicthTopicSpider(scrapy.Spider):
     def start_requests(self):
         urls = self.generateTopicUrls(self.settings.get('PAGE_NUMBER'))
         for url in urls:
-            yield SplashRequest(url, self.parse, args={"wait": 2})
+            yield scrapy.Request(url, self.parse)
 
     def parse(self, response):
         self.logger.info(datetime.datetime.now())

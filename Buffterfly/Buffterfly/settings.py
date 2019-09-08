@@ -13,7 +13,7 @@ BOT_NAME = 'Buffterfly'
 
 SPLASH_URL = 'http://192.168.1.219:8050'
 
-SPIDER_MODULES = ['Buffterfly.spiders']
+SPIDER_MODULES = ['Buffterfly.Buffterfly.spiders']
 NEWSPIDER_MODULE = 'Buffterfly.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

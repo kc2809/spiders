@@ -6,6 +6,7 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 from .items import TopicItem
+from .items import DetailItem
 from .helpers.mongo_helper import DBHelper
 
 import re
@@ -15,20 +16,38 @@ class BuffterflyPipeline(object):
     max = 0
 
     def open_spider(self, spider):
-        print('OPEN SPIDER')
+        print('OPEN SPIDER ' + spider.name)
+        self.max = 0
 
     def close_spider(self, spider):
-        print('CLOSE SPIDER')
+        print('CLOSE SPIDER ' + spider.name)
+        self.closeDetailSpider(spider)
+        self.closeTopicSpider(spider)
         print(self.max)
-        DBHelper.insertMaxSizeTopic(self.max)
+
+    def closeDetailSpider(self, spider):
+        if(spider.name == 'detail'):
+            DBHelper.updateCurrentSizeByAddingLoadedTopic(self.max)
+
+    def closeTopicSpider(self, spider):
+        if(spider.name == 'topic'):
+            DBHelper.insertMaxSizeTopic(self.max)
+            if DBHelper.getCurrentTopicSize() == 0:
+                DBHelper.updateCurrentSize(0)
 
     def process_item(self, item, spider):
         if isinstance(item, TopicItem):
             self.processTopicItem(item)
+        if isinstance(item, DetailItem):
+            self.processDetailItem(item)
+        print(item)
         return item
 
+    def processDetailItem(self, item):
+        self.max += 1
+        DBHelper.insertImagesToTopic(item)
+
     def processTopicItem(self, item):
-        print(item)
         DBHelper.insertTopic(item)
         self.calculateMaxSizeTopic(item)
 

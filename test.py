@@ -28,3 +28,12 @@ print(urlArr)
 
 str1 = 'topic-456.html'
 print(re.findall('\d+', str1)[0])
+
+
+str2 = "http://www.pic-th.com/topic-611.html"
+print(str2.split('/')[-1])
+
+url2Form = "http://www.pic-th.com/$url"
+arrx = []
+[arrx.append(url2Form.replace("$url", str(i))) for i in range(1, 100)]
+print(arrx)
